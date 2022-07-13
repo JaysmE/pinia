@@ -22,7 +22,12 @@ const PiniaNuxtPlugin: Plugin = (context, inject) => {
   // make sure to inject pinia after installing the plugin because in Nuxt 3, inject defines a non configurable getter
   // on app.config.globalProperties
   // add $pinia to the context
-  inject('pinia', pinia)
+  if (isVue2) {
+    inject('pinia', pinia)
+  } else {
+    // @ts-expect-error: vue 3 only
+    context.provide('pinia', pinia)
+  }
   // to allow accessing pinia without the $
   // TODO: remove this in deprecation
   context.pinia = pinia
